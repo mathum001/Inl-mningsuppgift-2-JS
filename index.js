@@ -52,7 +52,7 @@ function getWheather(lat, lon) {
 }
 
 
-function displayWeather(data){
+ offSet = function displayWeather(data){
     document.getElementById("bottom").innerHTML = "";
     let objekt = document.getElementById("bottom");
 
@@ -70,31 +70,42 @@ function displayWeather(data){
     fuktighet.innerHTML = "Fuktighet: " + data.main.humidity + "%";
     let vind = document.createElement("h3");
     vind.innerHTML = "Wind: " + data.wind.speed + "m/s";
-    /* let tid = document.createElement("h2");///TIDEN
-    tid.innerHTML = (new Date(data.dt*1000-(data.timezone*1000))); */
-    offSet = data.timezone;
-    setInterval(clock(offSet), 1000);
 
+    //setInterval((clock(offSet)), 1000);
     objekt.append(huvudValue, bild, stadNamn, grader, luftTryck, fuktighet, vind);
     
+    return (data.timezone);
 
 
 }
 
 /////////Clock below///////
 
-function clock(data){
+setInterval((function clock(offSet){
     
     let localTime = new Date();
     let tidZonen = localTime.getTimezoneOffset();
-    hours.innerHTML = localTime.getHours() + (tidZonen/60) + (data/3600);
+    if(offSet !== 0){
+        hours.innerHTML = localTime.getHours() + (tidZonen/60) + (offSet/3600);
+    }
+    else{
+        hours.innerHTML = localTime.getHours();
+    }
     minutes.innerHTML = localTime.getMinutes();
     seconds.innerHTML = localTime.getSeconds();
+
+    let spans = document.querySelectorAll('span');///Adds a 0 if the number is < 10
+    spans.forEach((span) => {
+        if(span.innerHTML.length === 1){
+        span.innerHTML = `0${span.innerHTML}`;
+        }})
     
-    console.log(tidZonen);
-    console.log(data);
+    console.log(tidZonen + "   tidszon");
+    console.log(offSet + "   offset");
     console.log(localTime);
-}
+
+    
+}),1000);
 
 
 
