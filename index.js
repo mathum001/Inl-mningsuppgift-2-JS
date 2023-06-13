@@ -2,6 +2,11 @@
 let city = 'London';
 let testBtn = document.getElementsByClassName("btn-search");
 let testSearch = document.getElementsByClassName("input-search");
+let offSet = 0;
+const hours = document.getElementById("hours");
+const minutes = document.getElementById("minutes");
+const seconds = document.getElementById("seconds");
+
 
 getCityCoords(city);
 testBtn[0].addEventListener("click", () =>{
@@ -23,7 +28,7 @@ function getCityCoords(name) {
         }
     )
         .catch(function (err) {
-            console.log("fetch Error :-S", err);
+            console.log("fetch Error", err);
         })
 
 }
@@ -36,9 +41,8 @@ function getWheather(lat, lon) {
                 return;
             }
             response.json().then(function (data) {
-                console.log(data)
+                console.log(data);
                 displayWeather(data);
-            
             });
         }
     )
@@ -68,6 +72,8 @@ function displayWeather(data){
     vind.innerHTML = "Wind: " + data.wind.speed + "m/s";
     /* let tid = document.createElement("h2");///TIDEN
     tid.innerHTML = (new Date(data.dt*1000-(data.timezone*1000))); */
+    offSet = data.timezone;
+    setInterval(clock(offSet), 1000);
 
     objekt.append(huvudValue, bild, stadNamn, grader, luftTryck, fuktighet, vind);
     
@@ -75,20 +81,20 @@ function displayWeather(data){
 
 }
 
-/* let clock =  */setInterval(function getIime(data){
-    let tidZonen = data;
+/////////Clock below///////
+
+function clock(data){
+    
     let localTime = new Date();
+    let tidZonen = localTime.getTimezoneOffset();
+    hours.innerHTML = localTime.getHours() + (tidZonen/60) + (data/3600);
+    minutes.innerHTML = localTime.getMinutes();
+    seconds.innerHTML = localTime.getSeconds();
     
+    console.log(tidZonen);
+    console.log(data);
     console.log(localTime);
-}, 1000);
-
-function displayTime(){
-    let hour = document.createElement("div");
-    let minute = document.createElement("div");
-    let second = document.createElement("div");
-
-    let time = document.getElementById("time");
-
-    time.append(hour, minute, second);
-    
 }
+
+
+
