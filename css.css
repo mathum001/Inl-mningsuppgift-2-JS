@@ -15,15 +15,25 @@ main {
 
 #top {
     display: flex;
+    justify-items: center;
     justify-content: center;
     align-items: center;
     padding: 0;
     margin: 0;
     height: 50%;
+    gap: 100px;
+}
+
+
+
+#time, #date{
+  font-size: xx-large;
+  align-items: center;
 }
 
 #bottom {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     justify-content: center;
     align-items: center;
     width: 80%;
