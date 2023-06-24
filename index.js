@@ -2,7 +2,8 @@
 let city = 'London';
 let testBtn = document.getElementsByClassName("btn-search");
 let testSearch = document.getElementsByClassName("input-search");
-let offSet = 0;
+let offSet = 3600;
+let intervalID;
 const hours = document.getElementById("hours");
 const minutes = document.getElementById("minutes");
 const seconds = document.getElementById("seconds");
@@ -11,6 +12,7 @@ const seconds = document.getElementById("seconds");
 getCityCoords(city);
 testBtn[0].addEventListener("click", () =>{
     getCityCoords(testSearch[0].value);
+    clearInterval(intervalID);
 })
 
 //Får tag på kordinaterna och kör sedan getweather funktionen
@@ -22,7 +24,7 @@ function getCityCoords(name) {
                 return;
             }
             response.json().then(function (data) {
-                console.log(data);
+                /* console.log(data); */
                 getWheather(data[0].lat, data[0].lon);
             });
         }
@@ -43,6 +45,10 @@ function getWheather(lat, lon) {
             response.json().then(function (data) {
                 console.log(data);
                 displayWeather(data);
+                /* clearInterval(intervalID); */
+                intervalID = setInterval(clock, 1000, data.timezone);
+                /* setInterval(clock, 1000, data.timezone); */
+                
             });
         }
     )
@@ -52,7 +58,7 @@ function getWheather(lat, lon) {
 }
 
 
- offSet = function displayWeather(data){
+ function displayWeather(data){
     document.getElementById("bottom").innerHTML = "";
     let objekt = document.getElementById("bottom");
 
@@ -71,17 +77,17 @@ function getWheather(lat, lon) {
     let vind = document.createElement("h3");
     vind.innerHTML = "Wind: " + data.wind.speed + "m/s";
 
-    //setInterval((clock(offSet)), 1000);
+    
     objekt.append(huvudValue, bild, stadNamn, grader, luftTryck, fuktighet, vind);
     
-    return (data.timezone);
+    /* return (data.timezone); */
 
 
 }
 
 /////////Clock below///////
 
-setInterval((function clock(offSet){
+function clock(offSet){
     
     let localTime = new Date();
     let tidZonen = localTime.getTimezoneOffset();
@@ -100,12 +106,12 @@ setInterval((function clock(offSet){
         span.innerHTML = `0${span.innerHTML}`;
         }})
     
-    console.log(tidZonen + "   tidszon");
+   /*  console.log(tidZonen + "   tidszon");
     console.log(offSet + "   offset");
-    console.log(localTime);
+    console.log(localTime); */
 
     
-}),1000);
+}
 
 
 
