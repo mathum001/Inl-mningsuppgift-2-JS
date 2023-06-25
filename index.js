@@ -3,7 +3,8 @@ let city = 'London';
 let testBtn = document.getElementsByClassName("btn-search");
 let testSearch = document.getElementsByClassName("input-search");
 let offSet = 3600;
-let intervalID;
+let intervalId;
+let intervalIdClock;
 const hours = document.getElementById("hours");
 const minutes = document.getElementById("minutes");
 const seconds = document.getElementById("seconds");
@@ -15,7 +16,7 @@ setInterval((getCityCoords(city)), 1800000);
 
 testBtn[0].addEventListener("click", () => {
     getCityCoords(testSearch[0].value);
-    clearInterval(intervalID);
+    clearInterval(intervalIdClock);
 })
 
 //Får tag på kordinaterna och kör sedan getweather funktionen
@@ -27,13 +28,13 @@ function getCityCoords(name) {
                 return;
             }
             response.json().then(function (data) {
-                /* console.log(data); */
-                getWheather(data[0].lat, data[0].lon);
+                clearInterval(intervalId);
+                intervalId = setInterval(getWheather(data[0].lat, data[0].lon), 1800000);
             });
         }
     )
         .catch(function (err) {
-            console.log("fetch Error", err);
+            console.log("Fetch Error", err);
         })
 
 }
@@ -49,13 +50,13 @@ function getWheather(lat, lon) {
             response.json().then(function (data) {
                 console.log(data);
                 displayWeather(data);
-                intervalID = setInterval(clock, 1000, data.timezone);
+                intervalIdClock = setInterval(clock, 1000, data.timezone);
 
             });
         }
     )
         .catch(function (err) {
-            console.log("fetch Error :-S", err);
+            console.log("Fetch Error", err);
         })
 }
 
